@@ -23,13 +23,13 @@ namespace MiniProject____API.Migrations
 
             modelBuilder.Entity("InterestPerson", b =>
                 {
-                    b.Property<string>("InterestsInterestId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("InterestsId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PeopleId")
                         .HasColumnType("int");
 
-                    b.HasKey("InterestsInterestId", "PeopleId");
+                    b.HasKey("InterestsId", "PeopleId");
 
                     b.HasIndex("PeopleId");
 
@@ -38,8 +38,11 @@ namespace MiniProject____API.Migrations
 
             modelBuilder.Entity("MiniProject____API.Models.Interest", b =>
                 {
-                    b.Property<string>("InterestId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -48,25 +51,23 @@ namespace MiniProject____API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("InterestId");
+                    b.HasKey("Id");
 
                     b.ToTable("Interests");
                 });
 
             modelBuilder.Entity("MiniProject____API.Models.InterestLink", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("InterestId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("PersonId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("InterestId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PersonId1")
+                    b.Property<int>("PersonId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -77,7 +78,7 @@ namespace MiniProject____API.Migrations
 
                     b.HasIndex("InterestId");
 
-                    b.HasIndex("PersonId1");
+                    b.HasIndex("PersonId");
 
                     b.ToTable("InterestsLinks");
                 });
@@ -111,7 +112,7 @@ namespace MiniProject____API.Migrations
                 {
                     b.HasOne("MiniProject____API.Models.Interest", null)
                         .WithMany()
-                        .HasForeignKey("InterestsInterestId")
+                        .HasForeignKey("InterestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -132,7 +133,7 @@ namespace MiniProject____API.Migrations
 
                     b.HasOne("MiniProject____API.Models.Person", "Person")
                         .WithMany("InterestLinks")
-                        .HasForeignKey("PersonId1")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

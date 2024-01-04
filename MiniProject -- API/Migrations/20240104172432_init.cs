@@ -12,13 +12,14 @@ namespace MiniProject____API.Migrations
                 name: "Interests",
                 columns: table => new
                 {
-                    InterestId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Interests", x => x.InterestId);
+                    table.PrimaryKey("PK_Interests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,17 +41,17 @@ namespace MiniProject____API.Migrations
                 name: "InterestPerson",
                 columns: table => new
                 {
-                    InterestsInterestId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    InterestsId = table.Column<int>(type: "int", nullable: false),
                     PeopleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InterestPerson", x => new { x.InterestsInterestId, x.PeopleId });
+                    table.PrimaryKey("PK_InterestPerson", x => new { x.InterestsId, x.PeopleId });
                     table.ForeignKey(
-                        name: "FK_InterestPerson_Interests_InterestsInterestId",
-                        column: x => x.InterestsInterestId,
+                        name: "FK_InterestPerson_Interests_InterestsId",
+                        column: x => x.InterestsId,
                         principalTable: "Interests",
-                        principalColumn: "InterestId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_InterestPerson_People_PeopleId",
@@ -64,11 +65,11 @@ namespace MiniProject____API.Migrations
                 name: "InterestsLinks",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InterestId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PersonId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PersonId1 = table.Column<int>(type: "int", nullable: false)
+                    InterestId = table.Column<int>(type: "int", nullable: false),
+                    PersonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,11 +78,11 @@ namespace MiniProject____API.Migrations
                         name: "FK_InterestsLinks_Interests_InterestId",
                         column: x => x.InterestId,
                         principalTable: "Interests",
-                        principalColumn: "InterestId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_InterestsLinks_People_PersonId1",
-                        column: x => x.PersonId1,
+                        name: "FK_InterestsLinks_People_PersonId",
+                        column: x => x.PersonId,
                         principalTable: "People",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -98,9 +99,9 @@ namespace MiniProject____API.Migrations
                 column: "InterestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InterestsLinks_PersonId1",
+                name: "IX_InterestsLinks_PersonId",
                 table: "InterestsLinks",
-                column: "PersonId1");
+                column: "PersonId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

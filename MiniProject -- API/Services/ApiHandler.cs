@@ -12,13 +12,13 @@ namespace MiniProject____API.Services
 {
     public class ApiHandler
     {
-        public static IResult GetInterests(ApplicationContext context, string interestId)
+        public static IResult GetInterests(ApplicationContext context)
         {
             // Retrieve a list of interests with their IDs and titles
             var interests = context.Interests
                     .Select(p => new InterestViewModel()
                     {
-                        InterestId = p.InterestId,
+                        InterestId = p.Id,
                         Title = p.Title,
                     })
                     .ToList();
@@ -27,15 +27,13 @@ namespace MiniProject____API.Services
             return Results.Json(interests);
         }
 
-        public static IResult AddInterest(ApplicationContext context, string name, InterestDto interestDto)
+        public static IResult AddInterest(ApplicationContext context, int interestId, InterestDto interestDto)
         {
-            // Create an interest ID based on the provided title
-            string interestId = Utility.CreateInterestId(interestDto.Title);
-
+            
             // Create an Interest object with the provided information
             Interest interest = new Interest()
             {
-                InterestId = interestId,
+                Id = interestId,
                 Title = interestDto.Title,
                 Description = interestDto.Description,
             };
@@ -75,14 +73,14 @@ namespace MiniProject____API.Services
             return Results.Json(personInterests);
         }
 
-        public static IResult AddInterestLink(ApplicationContext context, int personId, string interestId, InterestLinksDto interestLinks)
+        public static IResult AddInterestLink(ApplicationContext context, int personId, int interestId, InterestLinksDto interestLinks)
         {
             // Retrieve the person and interest based on the provided IDs
             Person person = context.People
                 .Single(p => p.Id == personId);
 
             Interest interest = context.Interests
-                .Single(i => i.InterestId == interestId);
+                .Single(i => i.Id == interestId);
 
             // Check if the person is found
             if (person == null)
@@ -153,13 +151,13 @@ namespace MiniProject____API.Services
             }
         }
 
-        public static IResult ConnectPersonAndInterest(ApplicationContext context, int personId, string interestId )
+        public static IResult ConnectPersonAndInterest(ApplicationContext context, int personId, int interestId )
         {
             try
             {
                 // Retrive the interest
                 Interest interest = context.Interests
-                    .Single(i => i.InterestId == interestId);
+                    .Single(i => i.Id == interestId);
 
                 if (interest == null)
                 {
@@ -206,7 +204,7 @@ namespace MiniProject____API.Services
                 // Retrieve interest links connected to the person's interests
                 List<InterestLinkViewModel> interestLinks =
                     context.InterestsLinks
-                    .Where(il => person.Interests.Any(i => i.InterestId == il.InterestId))
+                    .Where(il => person.Interests.Any(i => i.Id == il.InterestId))
                     .Select(il => new InterestLinkViewModel
                     {
                         Url = il.Url
