@@ -33,7 +33,6 @@ namespace MiniProject____API.Services
             // Create an Interest object with the provided information
             Interest interest = new Interest()
             {
-                Id = interestId,
                 Title = interestDto.Title,
                 Description = interestDto.Description,
             };
